@@ -1,22 +1,25 @@
 package br.devus.redesocial.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.UUID;
 
 @Entity
 @Table(name = "role_tbl")
 public class Role implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    @Column(name = "roleId", columnDefinition = "BINARY(16)")
     private UUID roleId;
+
     //@Enumerated(EnumType.STRING)
-//    @Column(nullable = false, unique = true)
+    //@Column(nullable = false, unique = true)
     private String roleName;
 
     public Role() {

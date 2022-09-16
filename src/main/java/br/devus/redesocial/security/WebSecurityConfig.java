@@ -17,7 +17,7 @@ public class WebSecurityConfig {
                 .httpBasic()
                 .and()
                 .authorizeHttpRequests()
-                .antMatchers("/user", "/user/**").permitAll()
+                .antMatchers("/user", "/user/**", "/role").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .csrf().disable();
