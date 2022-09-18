@@ -46,7 +46,7 @@ public class UserController {
     }
 
     //     CRIANDO USER COM ROLE('ADMIN')
-    @PostMapping( "/createAdmin")
+    @PostMapping("/createAdmin")
     public UserModel saveUserAdmin(@RequestBody UserModel user)
     {
         UserModel userModel = createUserService.execute(user);
@@ -64,7 +64,7 @@ public class UserController {
     }
 
     //     CRIANDO USER COM ROLE('USER')
-    @PostMapping( "/createUSER")
+    @PostMapping("/createUSER")
     public UserModel saveUserWithRole(@RequestBody UserModel user)
     {
         UserModel userModel = createUserService.execute(user);

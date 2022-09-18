@@ -1,6 +1,7 @@
 package br.devus.redesocial.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -26,6 +27,7 @@ public class UserModel implements Serializable {
     @Column(nullable = false, unique = false)
     private String birthDate;
 
+    @JsonIgnore
     @Column(nullable = false, unique = false)
     private String password;
 

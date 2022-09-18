@@ -29,7 +29,6 @@ public class UserService {
 
     public ResponseEntity<UserModel> getUserById(UUID id)
     {
-        System.out.println(id);
         return userRepository.findById(id).map(user -> ResponseEntity.ok().body(user))
                 .orElse(ResponseEntity.notFound().build());
     }

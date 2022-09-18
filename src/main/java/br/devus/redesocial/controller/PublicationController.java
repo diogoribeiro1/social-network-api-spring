@@ -6,6 +6,7 @@ import br.devus.redesocial.service.ProfileService;
 import br.devus.redesocial.service.PublicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class PublicationController {
     @Autowired
     ProfileService profileService;
 
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping("/{idProfile}")
     public PublicationsModel savePublication (@PathVariable UUID idProfile, @RequestBody PublicationsModel publicationsModel)
     {
@@ -31,18 +33,21 @@ public class PublicationController {
        return publicationService.savePublication(publicationsModel);
     }
 
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping
     public List<PublicationsModel> getAllPublications ()
     {
         return publicationService.getAllPublications();
     }
 
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping("/{id}")
     public List<PublicationsModel> getAllPublicationsByIdProfile (@PathVariable UUID id)
     {
         return publicationService.getPublicationsByIdProfile(id);
     }
 
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @DeleteMapping("/{idPublication}")
     public ResponseEntity<Object> deletePublication (@PathVariable UUID idPublication)
     {
