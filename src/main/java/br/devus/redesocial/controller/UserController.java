@@ -33,22 +33,20 @@ public class UserController {
 
     @PostMapping
     @ResponseBody
-    public ResponseEntity<UserModel> saveUser(@RequestBody UserModel userModel)
-    {
+    public ResponseEntity<UserModel> saveUser(@RequestBody UserModel userModel) {
         return userService.saveUser(userModel);
     }
 
     @GetMapping
     @ResponseBody
-    public ResponseEntity<List<UserModel>> getAllUsers()
-    {
+    public ResponseEntity<List<UserModel>> getAllUsers() {
         return userService.getAllUsers();
     }
 
     //     CRIANDO USER COM ROLE('ADMIN')
     @PostMapping("/createAdmin")
-    public UserModel saveUserAdmin(@RequestBody UserModel user)
-    {
+    public UserModel saveUserAdmin(@RequestBody UserModel user) {
+        System.out.println(user.getPassword());
         UserModel userModel = createUserService.execute(user);
         Role role = roleService.getRoleByName("ADMIN").getBody();
 
@@ -65,8 +63,7 @@ public class UserController {
 
     //     CRIANDO USER COM ROLE('USER')
     @PostMapping("/createUSER")
-    public UserModel saveUserWithRole(@RequestBody UserModel user)
-    {
+    public UserModel saveUserWithRole(@RequestBody UserModel user) {
         UserModel userModel = createUserService.execute(user);
         Role role = roleService.getRoleByName("USER").getBody();
 
@@ -83,28 +80,24 @@ public class UserController {
 
     // ADCIONA ROLE EM USER
     @PostMapping(value = "/role")
-    public UserModel role(@RequestBody CreateUserRoleDTO createUserRoleDTO)
-    {
+    public UserModel role(@RequestBody CreateUserRoleDTO createUserRoleDTO) {
         return createRoleUserService.execute(createUserRoleDTO);
     }
 
     @GetMapping("/{id}")
     @ResponseBody
-    public ResponseEntity<UserModel> getUserById(@PathVariable UUID id)
-    {
+    public ResponseEntity<UserModel> getUserById(@PathVariable UUID id) {
         return userService.getUserById(id);
     }
 
     @PutMapping("/{id}")
     @ResponseBody
-    public ResponseEntity<UserModel> updateUser(@PathVariable UUID id, @RequestBody UserModel userModel)
-    {
+    public ResponseEntity<UserModel> updateUser(@PathVariable UUID id, @RequestBody UserModel userModel) {
         return userService.updateUserById(userModel, id);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteUser(@PathVariable UUID id)
-    {
+    public ResponseEntity<Object> deleteUser(@PathVariable UUID id) {
         return userService.deleteUserById(id);
     }
 

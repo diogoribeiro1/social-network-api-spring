@@ -1,51 +1,41 @@
 package br.devus.redesocial.controller;
 
 import br.devus.redesocial.model.ProfileModel;
-import br.devus.redesocial.model.UserModel;
-import br.devus.redesocial.service.UserService;
+import br.devus.redesocial.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/profile")
 public class ProfileController {
 
     @Autowired
-    UserService userService;
+    ProfileService profileService;
 
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<UserModel> saveProfile(@RequestBody ProfileModel profileModel) {
-
-        UserModel userModel = userService.getUserById(profileModel.getIdUser()).getBody();
-
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        String nome;
-
-        if (principal instanceof UserDetails) {
-            nome = ((UserDetails)principal).getUsername();
-        } else {
-            nome = principal.toString();
-        }
-        System.out.println(nome);
-
-        if (userModel.getProfile() == null)
-        {
-            userModel.setProfile(profileModel);
-            userService.saveUser(userModel);
-            return ResponseEntity.ok().body(userModel);
-        }else{
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<ProfileModel> saveProfile(@RequestBody ProfileModel profileModel) {
+        return profileService.saveProfile(profileModel);
     }
 
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @GetMapping
+    public ResponseEntity<List<ProfileModel>> getAllProfile() {
+        return profileService.getAllProfiles();
+    }
 
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @GetMapping("/{id}")
+    public ResponseEntity<ProfileModel> getProfileById(@PathVariable UUID id) {
+        return profileService.getProfileById(id);
+    }
 
 }
+
+
+

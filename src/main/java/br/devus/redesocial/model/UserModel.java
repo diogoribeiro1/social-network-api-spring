@@ -27,7 +27,6 @@ public class UserModel implements Serializable {
     @Column(nullable = false, unique = false)
     private String birthDate;
 
-    @JsonIgnore
     @Column(nullable = false, unique = false)
     private String password;
 
