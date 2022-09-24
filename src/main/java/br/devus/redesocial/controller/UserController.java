@@ -46,7 +46,7 @@ public class UserController {
     //     CRIANDO USER COM ROLE('ADMIN')
     @PostMapping("/createAdmin")
     public UserModel saveUserAdmin(@RequestBody UserModel user) {
-        System.out.println(user.getPassword());
+
         UserModel userModel = createUserService.execute(user);
         Role role = roleService.getRoleByName("ADMIN").getBody();
 
