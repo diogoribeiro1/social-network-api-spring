@@ -4,6 +4,8 @@ import br.devus.redesocial.model.ProfileModel;
 import br.devus.redesocial.model.PublicationsModel;
 import br.devus.redesocial.service.ProfileService;
 import br.devus.redesocial.service.PublicationService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,6 +18,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/publication")
+@Api(value = "Api Rest Publications")
 public class PublicationController {
 
     @Autowired
@@ -26,6 +29,7 @@ public class PublicationController {
 
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping("/{idProfile}")
+    @ApiOperation(value = "Create a publication")
     public ResponseEntity<PublicationsModel> savePublication (@PathVariable UUID idProfile, @RequestBody PublicationsModel publicationsModel)
     {
        ProfileModel profileModel =  profileService.getProfileById(idProfile).getBody();
@@ -37,6 +41,7 @@ public class PublicationController {
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping
+    @ApiOperation(value = "Get all publications")
     public ResponseEntity<List<PublicationsModel>> getAllPublications ()
     {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -54,6 +59,7 @@ public class PublicationController {
 
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping("/{id}")
+    @ApiOperation(value = "Create a publication by id profile")
     public ResponseEntity<List<PublicationsModel>> getAllPublicationsByIdProfile (@PathVariable UUID id)
     {
         return publicationService.getAllPublicationsByIdProfile(id);
@@ -61,6 +67,7 @@ public class PublicationController {
 
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @DeleteMapping("/{idPublication}")
+    @ApiOperation(value = "Delete a publication")
     public ResponseEntity<Object> deletePublication (@PathVariable UUID idPublication)
     {
         publicationService.deletePublication(idPublication);

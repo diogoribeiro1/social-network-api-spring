@@ -7,6 +7,8 @@ import br.devus.redesocial.service.CreateRoleUserService;
 import br.devus.redesocial.service.CreateUserService;
 import br.devus.redesocial.service.RoleService;
 import br.devus.redesocial.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/user")
+@Api(value = "Api Rest Users")
 public class UserController {
 
     @Autowired
@@ -33,18 +36,21 @@ public class UserController {
 
     @PostMapping
     @ResponseBody
+    @ApiOperation(value = "Create a user without role")
     public ResponseEntity<UserModel> saveUser(@RequestBody UserModel userModel) {
         return userService.saveUser(userModel);
     }
 
     @GetMapping
     @ResponseBody
+    @ApiOperation(value = "Get all users")
     public ResponseEntity<List<UserModel>> getAllUsers() {
         return userService.getAllUsers();
     }
 
     //     CRIANDO USER COM ROLE('ADMIN')
     @PostMapping("/createAdmin")
+    @ApiOperation(value = "Create a user with role ADMIN")
     public UserModel saveUserAdmin(@RequestBody UserModel user) {
 
         UserModel userModel = createUserService.execute(user);
@@ -63,6 +69,7 @@ public class UserController {
 
     //     CRIANDO USER COM ROLE('USER')
     @PostMapping("/createUSER")
+    @ApiOperation(value = "Create user with role USER")
     public UserModel saveUserWithRole(@RequestBody UserModel user) {
         UserModel userModel = createUserService.execute(user);
         Role role = roleService.getRoleByName("USER").getBody();
@@ -80,23 +87,27 @@ public class UserController {
 
     // ADCIONA ROLE EM USER
     @PostMapping(value = "/role")
+    @ApiOperation(value = "Add Role in user")
     public UserModel role(@RequestBody CreateUserRoleDTO createUserRoleDTO) {
         return createRoleUserService.execute(createUserRoleDTO);
     }
 
     @GetMapping("/{id}")
     @ResponseBody
+    @ApiOperation(value = "Get a user by id")
     public ResponseEntity<UserModel> getUserById(@PathVariable UUID id) {
         return userService.getUserById(id);
     }
 
     @PutMapping("/{id}")
     @ResponseBody
+    @ApiOperation(value = "Update a user")
     public ResponseEntity<UserModel> updateUser(@PathVariable UUID id, @RequestBody UserModel userModel) {
         return userService.updateUserById(userModel, id);
     }
 
     @DeleteMapping("/{id}")
+    @ApiOperation(value = "Delete a user")
     public ResponseEntity<Object> deleteUser(@PathVariable UUID id) {
         return userService.deleteUserById(id);
     }
