@@ -1,6 +1,7 @@
 package br.devus.redesocial.service;
 
 import br.devus.redesocial.dto.CreateUserRoleDTO;
+import br.devus.redesocial.exceptionhandler.userexception.UserNotFoundException;
 import br.devus.redesocial.model.Role;
 import br.devus.redesocial.model.UserModel;
 import br.devus.redesocial.repository.UserRepository;
@@ -30,7 +31,7 @@ public class CreateRoleUserService {
         List<Role> roles = new ArrayList<>();
 
         if (userExists.isEmpty()) {
-            throw new Error("User does not exists!");
+            throw new UserNotFoundException();
         }
 
         roles = createUserRoleDTO.getIdsRoles().stream().map(role -> {

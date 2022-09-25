@@ -1,5 +1,7 @@
 package br.devus.redesocial.service;
 
+import br.devus.redesocial.exceptionhandler.publicationExceptions.PublicationNotFoundException;
+import br.devus.redesocial.model.ProfileModel;
 import br.devus.redesocial.model.PublicationsModel;
 import br.devus.redesocial.repository.PublicationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +15,14 @@ import java.util.UUID;
 public class PublicationService {
 
     @Autowired
-    PublicationRepository publicationRepository;
+    private PublicationRepository publicationRepository;
 
-    public ResponseEntity<PublicationsModel> savePublication(PublicationsModel publicationsModel) {
+    @Autowired
+    private ProfileService profileService;
+
+    public ResponseEntity<PublicationsModel> savePublication(PublicationsModel publicationsModel, UUID idProfile) {
+        ProfileModel profileModel = profileService.getProfileById(idProfile).getBody();
+        publicationsModel.setProfile(profileModel);
         PublicationsModel modelResponse = publicationRepository.save(publicationsModel);
         return ResponseEntity.ok().body(modelResponse);
     }
@@ -25,11 +32,11 @@ public class PublicationService {
         return ResponseEntity.ok().body(listPublications);
     }
 
-    public void deletePublication(UUID idPublication) {
-        publicationRepository.findById(idPublication).map(publicationsModel -> {
+    public ResponseEntity<Object> deletePublication(UUID idPublication) {
+        return publicationRepository.findById(idPublication).map(publicationsModel -> {
             publicationRepository.delete(publicationsModel);
-            return null;
-        });
+            return ResponseEntity.noContent().build();
+        }).orElseThrow(PublicationNotFoundException::new);
     }
 
     public ResponseEntity<List<PublicationsModel>> getAllPublicationsByIdProfile(UUID uuid) {

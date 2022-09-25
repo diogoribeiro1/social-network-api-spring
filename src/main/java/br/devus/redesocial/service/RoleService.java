@@ -22,12 +22,12 @@ public class RoleService {
 
     public ResponseEntity<List<Role>> getAllRoles() {
         List<Role> roles = roleRepository.findAll();
-        return ResponseEntity.status(HttpStatus.OK).body(roles);
+        return ResponseEntity.ok().body(roles);
     }
 
     public ResponseEntity<Role> getRoleByName(String name) {
         Role role = roleRepository.findRoleByRoleName(name);
-        return ResponseEntity.status(HttpStatus.OK).body(role);
+        return ResponseEntity.ok().body(role);
     }
 
 }

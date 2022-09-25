@@ -18,7 +18,7 @@ import java.util.UUID;
 public class ProfileController {
 
     @Autowired
-    ProfileService profileService;
+    private ProfileService profileService;
 
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping
@@ -39,6 +39,13 @@ public class ProfileController {
     @ApiOperation(value = "Get a profile by id")
     public ResponseEntity<ProfileModel> getProfileById(@PathVariable UUID id) {
         return profileService.getProfileById(id);
+    }
+
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @DeleteMapping("/{id}")
+    @ApiOperation(value = "Delete a profile")
+    public ResponseEntity<Object> deleteProfile(@PathVariable UUID id) {
+        return profileService.deleteProfileById(id);
     }
 
 }

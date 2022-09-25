@@ -1,11 +1,7 @@
 package br.devus.redesocial.controller;
 
 import br.devus.redesocial.dto.CreateUserRoleDTO;
-import br.devus.redesocial.model.Role;
 import br.devus.redesocial.model.UserModel;
-import br.devus.redesocial.service.CreateRoleUserService;
-import br.devus.redesocial.service.CreateUserService;
-import br.devus.redesocial.service.RoleService;
 import br.devus.redesocial.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -13,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,23 +18,7 @@ import java.util.UUID;
 public class UserController {
 
     @Autowired
-    UserService userService;
-
-    @Autowired
-    RoleService roleService;
-
-    @Autowired
-    CreateUserService createUserService;
-
-    @Autowired
-    CreateRoleUserService createRoleUserService;
-
-    @PostMapping
-    @ResponseBody
-    @ApiOperation(value = "Create a user without role")
-    public ResponseEntity<UserModel> saveUser(@RequestBody UserModel userModel) {
-        return userService.saveUser(userModel);
-    }
+    private UserService userService;
 
     @GetMapping
     @ResponseBody
@@ -47,49 +26,33 @@ public class UserController {
     public ResponseEntity<List<UserModel>> getAllUsers() {
         return userService.getAllUsers();
     }
+    
+    @PostMapping
+    @ResponseBody
+    @ApiOperation(value = "Create a user without role")
+    public ResponseEntity<UserModel> saveUser(@RequestBody UserModel userModel) {
+        return userService.saveUser(userModel);
+    }
 
-    //     CRIANDO USER COM ROLE('ADMIN')
     @PostMapping("/createAdmin")
+    @ResponseBody
     @ApiOperation(value = "Create a user with role ADMIN")
-    public UserModel saveUserAdmin(@RequestBody UserModel user) {
-
-        UserModel userModel = createUserService.execute(user);
-        Role role = roleService.getRoleByName("ADMIN").getBody();
-
-        CreateUserRoleDTO userRoleDTO = new CreateUserRoleDTO();
-        List<UUID> lista = new ArrayList<>();
-
-        lista.add(role.getRoleId());
-        userRoleDTO.setIdsRoles(lista);
-        userRoleDTO.setIdUser(userModel.getIdUser());
-
-        createRoleUserService.execute(userRoleDTO);
-        return userModel;
+    public ResponseEntity<UserModel> saveUserAdmin(@RequestBody UserModel user) {
+        return userService.saveUserWithRoleAdmin(user);
     }
 
-    //     CRIANDO USER COM ROLE('USER')
     @PostMapping("/createUSER")
+    @ResponseBody
     @ApiOperation(value = "Create user with role USER")
-    public UserModel saveUserWithRole(@RequestBody UserModel user) {
-        UserModel userModel = createUserService.execute(user);
-        Role role = roleService.getRoleByName("USER").getBody();
-
-        CreateUserRoleDTO userRoleDTO = new CreateUserRoleDTO();
-        List<UUID> lista = new ArrayList<>();
-
-        lista.add(role.getRoleId());
-        userRoleDTO.setIdsRoles(lista);
-        userRoleDTO.setIdUser(userModel.getIdUser());
-
-        createRoleUserService.execute(userRoleDTO);
-        return userModel;
+    public ResponseEntity<UserModel> saveUserWithRole(@RequestBody UserModel user) {
+        return userService.saveUserWithRoleUser(user);
     }
 
-    // ADCIONA ROLE EM USER
     @PostMapping(value = "/role")
+    @ResponseBody
     @ApiOperation(value = "Add Role in user")
-    public UserModel role(@RequestBody CreateUserRoleDTO createUserRoleDTO) {
-        return createRoleUserService.execute(createUserRoleDTO);
+    public ResponseEntity<UserModel> role(@RequestBody CreateUserRoleDTO createUserRoleDTO) {
+        return userService.saveRoleToExistingUser(createUserRoleDTO);
     }
 
     @GetMapping("/{id}")

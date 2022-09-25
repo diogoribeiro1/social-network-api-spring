@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
@@ -22,15 +23,19 @@ public class UserModel implements Serializable {
     @Column(name = "idUser", columnDefinition = "BINARY(16)")
     private UUID idUser;
 
+    @NotNull
     @Column(nullable = false, unique = true)
     private String fullName;
 
+    @NotNull
     @Column(nullable = false, unique = false)
     private String birthDate;
 
+    @NotNull
     @Column(nullable = false, unique = false)
     private String password;
 
+    @NotNull
     @Column(nullable = false, unique = true)
     private String email;
 
