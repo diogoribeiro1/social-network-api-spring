@@ -1,6 +1,11 @@
 package br.devus.redesocial.model;
 
 import javax.persistence.*;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.GenericGenerator;
+
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -8,57 +13,65 @@ import java.util.UUID;
 public class FollowModel {
 
     @Id
-    @GeneratedValue
-    private UUID idFollow;
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    @Column(name = "id", columnDefinition = "BINARY(16)")
+    private UUID id;
 
-    @OneToOne
-    private UserModel followers;
-
-    @OneToOne
-    private UserModel follow;
+    private UUID Followed;
 
     @ManyToOne
-    private ProfileModel profile;
+    private ProfileModel Follower;
+
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 
     public FollowModel() {
     }
 
-    public FollowModel(UUID idFollow, UserModel followers, UserModel follow, ProfileModel profile) {
-        this.idFollow = idFollow;
-        this.followers = followers;
-        this.follow = follow;
-        this.profile = profile;
+    public FollowModel(UUID id, UUID followed, ProfileModel follower, LocalDateTime createdAt) {
+        this.id = id;
+        Followed = followed;
+        Follower = follower;
+        this.createdAt = createdAt;
     }
 
-    public UUID getIdFollow() {
-        return idFollow;
+    public FollowModel(UUID followed, ProfileModel follower) {
+        Followed = followed;
+        Follower = follower;
     }
 
-    public void setIdFollow(UUID idFollow) {
-        this.idFollow = idFollow;
+    public UUID getId() {
+        return id;
     }
 
-    public UserModel getFollowers() {
-        return followers;
+    public void setId(UUID id) {
+        this.id = id;
     }
 
-    public void setFollowers(UserModel followers) {
-        this.followers = followers;
+    public UUID getFollowed() {
+        return Followed;
     }
 
-    public UserModel getFollow() {
-        return follow;
+    public void setFollowed(UUID followed) {
+        Followed = followed;
     }
 
-    public void setFollow(UserModel follow) {
-        this.follow = follow;
+    public ProfileModel getFollower() {
+        return Follower;
     }
 
-    public ProfileModel getProfile() {
-        return profile;
+    public void setFollower(ProfileModel follower) {
+        Follower = follower;
     }
 
-    public void setProfile(ProfileModel profile) {
-        this.profile = profile;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+    
 }

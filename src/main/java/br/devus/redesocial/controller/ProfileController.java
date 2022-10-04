@@ -1,5 +1,7 @@
 package br.devus.redesocial.controller;
 
+import br.devus.redesocial.dto.FollowProfileDTO;
+import br.devus.redesocial.model.FollowModel;
 import br.devus.redesocial.model.ProfileModel;
 import br.devus.redesocial.service.ProfileService;
 import io.swagger.annotations.Api;
@@ -47,6 +49,20 @@ public class ProfileController {
     public ResponseEntity<Object> deleteProfile(@PathVariable UUID id) {
         return profileService.deleteProfileById(id);
     }
+
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PostMapping("/follow")
+    @ApiOperation(value = "Follow a profile")
+    public ResponseEntity<FollowModel> followProfile(@RequestBody FollowProfileDTO followProfileDTO) {
+        return profileService.followProfile(followProfileDTO.getIdProfile(), followProfileDTO.getIdProfileToFollow());
+    }
+
+    // @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    // @GetMapping("/{id}/followers")
+    // @ApiOperation(value = "Get all followers")
+    // public ResponseEntity<List<ProfileModel>> getFollowers(@PathVariable UUID id) {
+    //     return profileService.getAllFollowers(id);
+    // }
 
 }
 

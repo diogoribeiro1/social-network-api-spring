@@ -2,23 +2,25 @@ package br.devus.redesocial.service;
 
 import br.devus.redesocial.exceptionhandler.profileException.ProfileAlreadyExistsException;
 import br.devus.redesocial.exceptionhandler.profileException.ProfileNotFoundException;
+import br.devus.redesocial.model.FollowModel;
 import br.devus.redesocial.model.ProfileModel;
 import br.devus.redesocial.model.UserModel;
+import br.devus.redesocial.repository.FollowRepository;
 import br.devus.redesocial.repository.ProfileRepository;
-import net.bytebuddy.implementation.bytecode.Throw;
+import br.devus.redesocial.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
+import javax.transaction.Transactional;
+
 @Service
+@Transactional
 public class ProfileService {
 
     @Autowired
@@ -26,6 +28,12 @@ public class ProfileService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private FollowRepository followRepository;
 
     public ResponseEntity<ProfileModel> saveProfile(ProfileModel profileModel) {
 
@@ -45,8 +53,9 @@ public class ProfileService {
         if (userModel.getProfile() == null) {
 
             userModel.setProfile(profileModel);
-            userService.saveUser(userModel);
-            return ResponseEntity.status(HttpStatus.CREATED).body(profileModel);
+            userModel = userRepository.save(userModel);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(userModel.getProfile());
         
         } else {
             throw new ProfileAlreadyExistsException();
@@ -63,9 +72,28 @@ public class ProfileService {
     }
 
     public ResponseEntity<Object> deleteProfileById(UUID id){
-       ProfileModel profileModel =  getProfileById(id).getBody();
+       ProfileModel profileModel =  this.getProfileById(id).getBody();
        profileRepository.delete(profileModel);
        return ResponseEntity.noContent().build();
     }
+
+    public ResponseEntity<FollowModel> followProfile(UUID id, UUID idProfileToFollow){
+
+        ProfileModel profile = this.getProfileById(id).getBody();
+        ProfileModel profileToFollow = this.getProfileById(idProfileToFollow).getBody();
+
+        FollowModel followModel = new FollowModel(profileToFollow.getIdProfile(), profile);
+
+        followModel = followRepository.save(followModel);
+
+        return ResponseEntity.ok().body(followModel);
+     }
+
+    //  public ResponseEntity<List<ProfileModel>> getAllFollowers(UUID id) {
+    //     ProfileModel profile = this.getProfileById(id).getBody();
+    //     System.out.println(profile.getFollowers());
+    //     return ResponseEntity.ok().body(profile.getFollowers());
+    // }
+
 
 }

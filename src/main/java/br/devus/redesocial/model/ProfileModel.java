@@ -3,21 +3,25 @@ package br.devus.redesocial.model;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+
+import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Table(name = "profiles_tbl")
-public class ProfileModel {
+public class ProfileModel implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(generator = "uuid2")
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Column(name = "idProfile", columnDefinition = "BINARY(16)")
     private UUID idProfile;
 
     @Column(nullable = false, unique = true)
-    private String username;
+    private String username;        
 
     @Column(nullable = true)
     private String urlImage;
@@ -25,28 +29,33 @@ public class ProfileModel {
     @Column(nullable = true)
     private String description;
 
-    @OneToMany
-    @Column(nullable = true)
-    private List<FollowModel> followers;
-
-    @OneToMany
-    @Column(nullable = true)
-    private List<PublicationsModel> publications;
-
     @Column(nullable = false)
     private UUID idUser;
+
+    // @ManyToOne(targetEntity = UUID.class)
+    // @ManyToMany
+    // @Column(name = "followers", columnDefinition = "BINARY(16)")
+    // private List<UUID> followers;
+    
+    // @ManyToOne(targetEntity = UUID.class)
+    // @ManyToMany
+    // @Column(name = "following", columnDefinition = "BINARY(16)")
+    // private List<UUID> following;
+
 
     public ProfileModel() {
     }
 
-    public ProfileModel(UUID idProfile, String username, String urlImage, String description, List<FollowModel> followers, List<PublicationsModel> publications, UUID idUser) {
+    public ProfileModel(UUID idProfile, String username, String urlImage, String description, UUID idUser) {
         this.idProfile = idProfile;
         this.username = username;
         this.urlImage = urlImage;
         this.description = description;
-        this.followers = followers;
-        this.publications = publications;
         this.idUser = idUser;
+    }
+
+    public static long getSerialversionuid() {
+        return serialVersionUID;
     }
 
     public UUID getIdProfile() {
@@ -81,22 +90,6 @@ public class ProfileModel {
         this.description = description;
     }
 
-    public List<FollowModel> getFollowers() {
-        return followers;
-    }
-
-    public void setFollowers(List<FollowModel> followers) {
-        this.followers = followers;
-    }
-
-    public List<PublicationsModel> getPublications() {
-        return publications;
-    }
-
-    public void setPublications(List<PublicationsModel> publications) {
-        this.publications = publications;
-    }
-
     public UUID getIdUser() {
         return idUser;
     }
@@ -104,4 +97,26 @@ public class ProfileModel {
     public void setIdUser(UUID idUser) {
         this.idUser = idUser;
     }
+
+    // public List<UUID> getFollowers() {
+    //     return followers;
+    // }
+
+    // public void setFollowers(List<UUID> followers) {
+    //     this.followers = followers;
+    // }
+
+    // public List<UUID> getFollowing() {
+    //     return following;
+    // }
+
+    // public void setFollowing(List<UUID> following) {
+    //     this.following = following;
+    // }
+
+
+   
+
+    
+
 }

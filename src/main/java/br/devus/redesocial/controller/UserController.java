@@ -63,7 +63,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    @ResponseBody
+    @ResponseBody   
     @ApiOperation(value = "Update a user")
     public ResponseEntity<UserModel> updateUser(@PathVariable UUID id, @RequestBody UserModel userModel) {
         return userService.updateUserById(userModel, id);
