@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -89,11 +90,16 @@ public class ProfileService {
         return ResponseEntity.ok().body(followModel);
      }
 
-    //  public ResponseEntity<List<ProfileModel>> getAllFollowers(UUID id) {
-    //     ProfileModel profile = this.getProfileById(id).getBody();
-    //     System.out.println(profile.getFollowers());
-    //     return ResponseEntity.ok().body(profile.getFollowers());
-    // }
+     public ResponseEntity<List<FollowModel>> getAllFollowers(UUID id) {
+        
+        ProfileModel profile = this.getProfileById(id).getBody();
+       
+        List<FollowModel> followers = new ArrayList<>();
+        
+        followers = followRepository.findByFollower(profile).orElseThrow();
+
+        return ResponseEntity.ok().body(followers);
+    }
 
 
 }

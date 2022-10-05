@@ -5,7 +5,6 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -31,17 +30,6 @@ public class ProfileModel implements Serializable {
 
     @Column(nullable = false)
     private UUID idUser;
-
-    // @ManyToOne(targetEntity = UUID.class)
-    // @ManyToMany
-    // @Column(name = "followers", columnDefinition = "BINARY(16)")
-    // private List<UUID> followers;
-    
-    // @ManyToOne(targetEntity = UUID.class)
-    // @ManyToMany
-    // @Column(name = "following", columnDefinition = "BINARY(16)")
-    // private List<UUID> following;
-
 
     public ProfileModel() {
     }
@@ -97,26 +85,4 @@ public class ProfileModel implements Serializable {
     public void setIdUser(UUID idUser) {
         this.idUser = idUser;
     }
-
-    // public List<UUID> getFollowers() {
-    //     return followers;
-    // }
-
-    // public void setFollowers(List<UUID> followers) {
-    //     this.followers = followers;
-    // }
-
-    // public List<UUID> getFollowing() {
-    //     return following;
-    // }
-
-    // public void setFollowing(List<UUID> following) {
-    //     this.following = following;
-    // }
-
-
-   
-
-    
-
 }

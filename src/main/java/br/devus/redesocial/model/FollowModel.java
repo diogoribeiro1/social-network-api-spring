@@ -18,10 +18,10 @@ public class FollowModel {
     @Column(name = "id", columnDefinition = "BINARY(16)")
     private UUID id;
 
-    private UUID Followed;
+    private UUID followed;
 
     @ManyToOne
-    private ProfileModel Follower;
+    private ProfileModel follower;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -30,16 +30,16 @@ public class FollowModel {
     public FollowModel() {
     }
 
-    public FollowModel(UUID id, UUID followed, ProfileModel follower, LocalDateTime createdAt) {
+    public FollowModel(UUID id, UUID Followed, ProfileModel Follower, LocalDateTime createdAt) {
         this.id = id;
-        Followed = followed;
-        Follower = follower;
+        followed = Followed;
+        follower = Follower;
         this.createdAt = createdAt;
     }
 
-    public FollowModel(UUID followed, ProfileModel follower) {
-        Followed = followed;
-        Follower = follower;
+    public FollowModel(UUID Followed, ProfileModel Follower) {
+        followed = Followed;
+        follower = Follower;
     }
 
     public UUID getId() {
@@ -51,19 +51,19 @@ public class FollowModel {
     }
 
     public UUID getFollowed() {
-        return Followed;
+        return followed;
     }
 
-    public void setFollowed(UUID followed) {
-        Followed = followed;
+    public void setFollowed(UUID Followed) {
+        followed = Followed;
     }
 
     public ProfileModel getFollower() {
-        return Follower;
+        return follower;
     }
 
-    public void setFollower(ProfileModel follower) {
-        Follower = follower;
+    public void setFollower(ProfileModel Follower) {
+        follower = Follower;
     }
 
     public LocalDateTime getCreatedAt() {

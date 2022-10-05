@@ -57,12 +57,12 @@ public class ProfileController {
         return profileService.followProfile(followProfileDTO.getIdProfile(), followProfileDTO.getIdProfileToFollow());
     }
 
-    // @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    // @GetMapping("/{id}/followers")
-    // @ApiOperation(value = "Get all followers")
-    // public ResponseEntity<List<ProfileModel>> getFollowers(@PathVariable UUID id) {
-    //     return profileService.getAllFollowers(id);
-    // }
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @GetMapping("/{id}/followers")
+    @ApiOperation(value = "Get all followers")
+    public ResponseEntity<List<FollowModel>> getFollowers(@PathVariable UUID id) {
+        return profileService.getAllFollowers(id);
+    }
 
 }
 
